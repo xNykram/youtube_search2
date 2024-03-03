@@ -1,10 +1,12 @@
-![logo](img/image.png "Title")
+<div style="text-align: center;">
+<img src="img/image.png">
 
 ytsearch2 is a [youtube-search](https://github.com/joetats/youtube_search) fork. The main focus is adding new features and patches.
+</div>
 
-### Example usage
+## Example usage
 
-## Using URL
+### Using URL
 
 ``` Python
 from youtube_search2 import YoutubeSearch
@@ -16,7 +18,7 @@ output: {'id': 'jNQXAC9IVRw', 'title': 'Me at the zoo', 'thumbnail': 'https://i.
 
 ```
 
-## Using keyword
+### Using keyword
 
 ``` Python
 from youtube_search2 import YoutubeSearch
