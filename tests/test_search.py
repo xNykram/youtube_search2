@@ -1,4 +1,4 @@
-from .youtube_search import YoutubeSearch
+from src.ytsearch import YoutubeSearch
 
 
 class TestSearch:
@@ -28,3 +28,5 @@ class TestSearch:
 
         dict_output = search.to_dict()
         assert "" == search.videos
+
+

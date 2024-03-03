@@ -1,27 +1,37 @@
 import requests
 import urllib.parse
 import json
-
+from bs4 import BeautifulSoup
+import re
 
 class YTSearch:
-    def __init__(self, search_terms: str, max_results=None):
-        self.search_terms = search_terms
-        self.max_results = max_results
-        self.videos = self._search()
+    def __init__(self):
+        self.url: str
+        self.videos: list
 
-    def _search(self):
-        encoded_search = urllib.parse.quote_plus(self.search_terms)
+    def _parse_html(self, soup_obj: BeautifulSoup):
+        video_id = re.search(r'(?<=\?v=)[\w-]+', self.url).group(0)
+        title = soup_obj.find("meta", {"name": "title"})['content']
+        thumbnail = f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg"
+        js_script = str(soup_obj.find_all("script")[20])
+        duration_mil = re.search(r'"approxDurationMs":"(\d+)"',js_script).group(1)
+        return {"id" : video_id, "title" : title, "thumbnail": thumbnail, "duration": duration_mil}
+        
+    def search_by_url(self, url: str):
+        if "https://" in url:
+            self.url = url
+            response = requests.get(url).text
+            soup_obj = BeautifulSoup(response, features="lxml")
+            return self._parse_html(soup_obj)
+    
+    def search_by_term(self, term: str, max_results: int = 10):
+        encoded_search = urllib.parse.quote_plus(term)
         BASE_URL = "https://youtube.com"
         url = f"{BASE_URL}/results?search_query={encoded_search}"
         response = requests.get(url).text
         while "ytInitialData" not in response:
             response = requests.get(url).text
-        results = self._parse_html(response)
-        if self.max_results is not None and len(results) > self.max_results:
-            return results[: self.max_results]
-        return results
-
-    def _parse_html(self, response):
+        
         results = []
         start = response.index("ytInitialData") + len("ytInitialData") + 3
         end = response.index("};", start) + 1
@@ -75,8 +85,10 @@ class YTSearch:
                     results.append(res)
 
             if results:
-                return results
-        return results
+                if max_results is not None and len(results) > max_results:
+                    return results[: max_results]
+            self.videos = results
+            return results
 
     def to_dict(self, clear_cache=True):
         result = self.videos
@@ -89,3 +101,7 @@ class YTSearch:
         if clear_cache:
             self.videos = ""
         return result
+
+search_engine = YTSearch()
+video_info = search_engine.search_by_term("Me at the zoo", max_results=1)
+print(video_info)

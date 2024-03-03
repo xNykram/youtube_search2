@@ -1,1 +1,37 @@
-test
+![logo](img/image.png "Title")
+
+ytsearch2 is a [youtube-search](https://github.com/joetats/youtube_search) fork. The main focus is adding new features and patches.
+
+### Example usage
+
+## Using URL
+
+``` Python
+from youtube_search2 import YoutubeSearch
+
+search_engine = YTSearch()
+video_info = search_engine.search_by_url("https://www.youtube.com/watch?v=jNQXAC9IVRw")
+
+output: {'id': 'jNQXAC9IVRw', 'title': 'Me at the zoo', 'thumbnail': 'https://i.ytimg.com/vi/jNQXAC9IVRw/maxresdefault.jpg', 'duration': '19063'}
+
+```
+
+## Using keyword
+
+``` Python
+from youtube_search2 import YoutubeSearch
+
+search_engine = YTSearch()
+video_info = search_engine.search_by_term("Me at the zoo", max_results=1)
+
+output: [{'id': 'jNQXAC9IVRw', 'thumbnails': ['https://i.ytimg.com/vi/jNQXAC9IVRw/hqdefault.jpg?sqp=-oaymwE9COADEI4CSFryq4qpAy8IARUAAAAAGAElAADIQj0AgKJDeAHwAQH4Ab4CgALwAYoCDAgAEAEYVCBYKGUwDw==&rs=AOn4CLC4lp5lwDTP5b30m6scq6a7lKyA8Q'], 'title': 'Me at the zoo', 'long_desc': None, 'channel': 'jawed', 'duration': '0:19', 'views': '310\xa0243\xa0516 views', 'publish_time': '18 years ago', 'url_suffix': '/watch?v=jNQXAC9IVRw&pp=ygUNTWUgYXQgdGhlIHpvbw%3D%3D'}]
+
+```
+
+### Plans
+
+- scrap more data like sub count for method `search_by_url`,
+- add types,
+- fix & write more tests.
+
+Please report any suggestions and issues [here](https://github.com/xNykram/youtube_search2/issues).
