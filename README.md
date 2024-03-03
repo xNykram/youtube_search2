@@ -1,7 +1,12 @@
-<div style="text-align: center;">
-<img src="img/image.png">
+<style>
+  .center {
+    text-align: center;
+  }
+</style>
 
-ytsearch2 is a [youtube-search](https://github.com/joetats/youtube_search) fork. The main focus is adding new features and patches.
+<div class="center">
+  <img src="img/image.png">
+  <p>ytsearch2 is a <a href="https://github.com/joetats/youtube_search">youtube-search</a> fork. The main focus is adding new features and patches.</p>
 </div>
 
 ## Example usage
