@@ -4,43 +4,51 @@ import json
 from bs4 import BeautifulSoup
 import re
 
+
 class YTSearch:
     def __init__(self):
         self.url: str
         self.videos: list
 
     def _parse_html(self, soup_obj: BeautifulSoup):
-        video_id = re.search(r'(?<=\?v=)[\w-]+', self.url).group(0)
-        title = soup_obj.find("meta", {"name": "title"})['content']
+        video_id = re.search(r"(?<=\?v=)[\w-]+", self.url).group(0)
+        title = soup_obj.find("meta", {"name": "title"})["content"]
         thumbnail = f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg"
         js_script = str(soup_obj.find_all("script")[20])
-        duration_mil = re.search(r'"approxDurationMs":"(\d+)"',js_script).group(1)
-        return {"id" : video_id, "title" : title, "thumbnail": thumbnail, "duration": duration_mil}
-        
+        duration_mil = re.search(r'"approxDurationMs":"(\d+)"', js_script).group(1)
+        return {
+            "id": video_id,
+            "title": title,
+            "thumbnail": thumbnail,
+            "duration": duration_mil,
+        }
+
+    def _fetch_yt_data(self) -> str:
+        try:
+            response = requests.get(url=self.url)
+            response.raise_for_status()
+        except requests.RequestException:
+            raise requests.RequestException("Failed to fetch data from YouTube.")
+        return response.text
+
     def search_by_url(self, url: str):
         if "https://" in url:
             self.url = url
-            response = requests.get(url).text
+            response = self._fetch_yt_data()
             soup_obj = BeautifulSoup(response, features="lxml")
             return self._parse_html(soup_obj)
-    
-    def search_by_term(self, term: str, max_results: int = 10):
+        else:
+            raise ValueError("Please provide valid URL.")
+
+    def search_by_term(self, term: str, max_results: int = None):
         encoded_search = urllib.parse.quote_plus(term)
         BASE_URL = "https://youtube.com"
-        url = f"{BASE_URL}/results?search_query={encoded_search}"
-        response = requests.get(url).text
-        while "ytInitialData" not in response:
-            response = requests.get(url).text
-        
-        results = []
-        start = response.index("ytInitialData") + len("ytInitialData") + 3
-        end = response.index("};", start) + 1
-        json_str = response[start:end]
-        data = json.loads(json_str)
+        self.url = f"{BASE_URL}/results?search_query={encoded_search}"
+        response = self._fetch_yt_data()
 
-        for contents in data["contents"]["twoColumnSearchResultsRenderer"][
-            "primaryContents"
-        ]["sectionListRenderer"]["contents"]:
+        results = []
+        searched_obj = self._prepare_data(response)
+        for contents in searched_obj:
             for video in contents["itemSectionRenderer"]["contents"]:
                 res = {}
                 if "videoRenderer" in video.keys():
@@ -86,22 +94,18 @@ class YTSearch:
 
             if results:
                 if max_results is not None and len(results) > max_results:
-                    return results[: max_results]
+                    return results[:max_results]
             self.videos = results
-            return results
+            break
+        return results
 
-    def to_dict(self, clear_cache=True):
-        result = self.videos
-        if clear_cache:
-            self.videos = ""
-        return result
-
-    def to_json(self, clear_cache=True):
-        result = json.dumps({"videos": self.videos})
-        if clear_cache:
-            self.videos = ""
-        return result
-
-search_engine = YTSearch()
-video_info = search_engine.search_by_term("Me at the zoo", max_results=1)
-print(video_info)
+    def _prepare_data(self, response):
+        start = response.index("ytInitialData") + len("ytInitialData") + 3
+        end = response.index("};", start) + 1
+        json_str = response[start:end]
+        data = json.loads(json_str)
+        searched_obj = data["contents"]["twoColumnSearchResultsRenderer"][
+            "primaryContents"
+        ]["sectionListRenderer"]["contents"]
+        
+        return searched_obj

@@ -1,32 +1,49 @@
-from src.ytsearch import YoutubeSearch
+import pytest
+from src.ytsearch import YTSearch
+import src
+from requests import RequestException
+@pytest.fixture
+def yt_search():
+    return YTSearch()
+
+def test_search_by_url_valid(yt_search):
+    url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    result = yt_search.search_by_url(url)
+    assert result["id"] == "dQw4w9WgXcQ"
+
+def test_search_by_url_invalid(yt_search):
+    url = "invalid_url"
+    with pytest.raises(ValueError):
+        yt_search.search_by_url(url)
+
+def test_search_by_term(yt_search):
+    term = "openai"
+    result = yt_search.search_by_term(term)
+    assert len(result) > 0
+
+def test_search_by_term_not_finished_loop(yt_search, mocker):
+    mocker.patch('src.ytsearch.YTSearch._prepare_data', return_value=[])
+    term = "openai"
+    result = yt_search.search_by_term(term)
+    
+    assert result == []
+
+def test_search_by_term_no_results(yt_search):
+    term = "#########################"
+    result = yt_search.search_by_term(term)
+    print(result)
+    assert len(result) == 0
 
 
-class TestSearch:
-
-    def test_init_defaults(self):
-        search = YoutubeSearch("test")
-        assert search.max_results is None
-        assert 1 <= len(search.videos)
-
-    def test_init_max_results(self):
-        search = YoutubeSearch("test", max_results=10)
-        assert 10 == search.max_results
-        assert 10 == len(search.videos)
-
-    def test_dict(self):
-        search = YoutubeSearch("test", max_results=10)
-        assert isinstance(search.to_dict(), list)
-
-    def test_json(self):
-        search = YoutubeSearch("test", max_results=10)
-        assert isinstance(search.to_json(), str)
-
-    def test_clear_cache(self):
-        search = YoutubeSearch("test", max_results=10)
-        json_output = search.to_json(clear_cache=False)
-        assert "" != search.videos
-
-        dict_output = search.to_dict()
-        assert "" == search.videos
+def test_search_by_term_with_max_results(yt_search):
+    term = "openai"
+    max_results = 5
+    result = yt_search.search_by_term(term, max_results)
+    assert len(result) == max_results
 
 
+def test_search_by_url_exception(yt_search):
+    with pytest.raises(RequestException) as exc_info:
+        url = "https://wrong_url"
+        yt_search.search_by_url(url)
+    assert str(exc_info.value) == "Failed to fetch data from YouTube."
