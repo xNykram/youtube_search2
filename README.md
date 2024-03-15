@@ -1,5 +1,5 @@
 <div class="center">
-  <img src="img/image.png">
+  <img src="https://i.ibb.co/f9f3tMM/image.png">
   <p>ytsearch2 is a <a href="https://github.com/joetats/youtube_search">youtube-search</a> fork. The main focus is adding new features and patches.</p>
 </div>
 
