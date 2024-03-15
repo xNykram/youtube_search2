@@ -1,6 +1,6 @@
 [project]
 name = "youtube_search2"
-version = "2.1.3"
+version = "2.1.4"
 authors = [
   {name = "Joe Tatusko", email = "tatuskojc@gmail.com"},
 ]
