@@ -1,0 +1,25 @@
+repos:
+
+  # STANDARD HOOKS #
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: forbid-new-submodules
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  # LINTER #
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.2.2
+    hooks:
+      - id: ruff
+
+  # CODE FORMATTER #
+  - repo: https://github.com/psf/black
+    rev: 24.2.0
+    hooks:
+      - id: black

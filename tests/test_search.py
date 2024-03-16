@@ -1,32 +1,38 @@
 import pytest
 from src.ytsearch import YTSearch
-import src
 from requests import RequestException
+
+
 @pytest.fixture
 def yt_search():
     return YTSearch()
+
 
 def test_search_by_url_valid(yt_search):
     url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     result = yt_search.search_by_url(url)
     assert result["id"] == "dQw4w9WgXcQ"
 
+
 def test_search_by_url_invalid(yt_search):
     url = "invalid_url"
     with pytest.raises(ValueError):
         yt_search.search_by_url(url)
+
 
 def test_search_by_term(yt_search):
     term = "openai"
     result = yt_search.search_by_term(term)
     assert len(result) > 0
 
+
 def test_search_by_term_not_finished_loop(yt_search, mocker):
-    mocker.patch('src.ytsearch.YTSearch._prepare_data', return_value=[])
+    mocker.patch("src.ytsearch.YTSearch._prepare_data", return_value=[])
     term = "openai"
     result = yt_search.search_by_term(term)
-    
+
     assert result == []
+
 
 def test_search_by_term_no_results(yt_search):
     term = "#########################"

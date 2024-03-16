@@ -107,5 +107,5 @@ class YTSearch:
         searched_obj = data["contents"]["twoColumnSearchResultsRenderer"][
             "primaryContents"
         ]["sectionListRenderer"]["contents"]
-        
+
         return searched_obj
