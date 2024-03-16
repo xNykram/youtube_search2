@@ -5,3 +5,4 @@ youtube_search2.egg-info
 .pytest_cache
 .coverage
 .coverage-report
+build
