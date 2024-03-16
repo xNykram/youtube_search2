@@ -19,7 +19,8 @@ dependencies = [
 "idna==3.6",
 "requests==2.31.0",
 "urllib3==2.2.1",
-"beautifulsoup4==4.12.3", 
+"beautifulsoup4==4.12.3",
+"lxml==5.1.0"
 ]
 
 keywords = ["yt", "ytsearch", "youtube_search", "youtube_search2", "youtube-search"]
