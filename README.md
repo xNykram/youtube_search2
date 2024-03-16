@@ -41,7 +41,5 @@ output: [{'id': 'jNQXAC9IVRw', 'thumbnails': ['https://i.ytimg.com/vi/jNQXAC9IVR
 ### Plans
 
 - scrap more data like sub count for method `search_by_url`,
-- add types,
-- fix & write more tests.
 
 Please report any suggestions and issues [here](https://github.com/xNykram/youtube_search2/issues).
