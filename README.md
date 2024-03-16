@@ -1,7 +1,16 @@
+
+
 <div class="center">
   <img src="https://i.ibb.co/f9f3tMM/image.png">
   <p>ytsearch2 is a <a href="https://github.com/joetats/youtube_search">youtube-search</a> fork. The main focus is adding new features and patches.</p>
 </div>
+
+
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+![GitHub Release](https://img.shields.io/github/v/release/xnykram/youtube_search2?&style=flat-square)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/xnykram/youtube_search2/pytest.yml?label=tests&style=flat-square)
+
 
 ## Example usage
 
