@@ -1,17 +1,21 @@
 [project]
 name = "youtube_search2"
-version = "2.1.5"
+version = "2.1.6"
 authors = [
-  {name = "Joe Tatusko", email = "tatuskojc@gmail.com"},
+  { name = "Joe Tatusko", email = "tatuskojc@gmail.com"},
 ]
 maintainers = [
-  { name="Patryk Ladocha", email="patrykladocha76@gmail.com" },
+  { name = "Patryk Ladocha", email = "patrykladocha76@gmail.com" },
 ]
-description = "A youtube_search fork with additional features and patches."
+description = "a youtube_search fork with additional features and patches."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.8"
 classifiers = [
-    "Programming Language :: Python :: 3.12"
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8"
 ]
 dependencies = [
 "certifi==2024.2.2",
